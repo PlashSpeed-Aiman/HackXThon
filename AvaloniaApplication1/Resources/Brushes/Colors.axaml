@@ -1,0 +1,42 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Application Color Palette -->
+    <!-- Define all application colors here for consistent branding -->
+
+    <!-- Primary Colors -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="#007ACC"/>
+    <SolidColorBrush x:Key="PrimaryHoverBrush" Color="#005A9E"/>
+    <SolidColorBrush x:Key="PrimaryPressedBrush" Color="#004578"/>
+
+    <!-- Secondary Colors -->
+    <SolidColorBrush x:Key="SecondaryBrush" Color="#6C757D"/>
+    <SolidColorBrush x:Key="SecondaryHoverBrush" Color="#5A6268"/>
+    <SolidColorBrush x:Key="SecondaryPressedBrush" Color="#494F54"/>
+
+    <!-- Accent Colors -->
+    <SolidColorBrush x:Key="AccentBrush" Color="#17A2B8"/>
+    <SolidColorBrush x:Key="AccentHoverBrush" Color="#138496"/>
+    <SolidColorBrush x:Key="AccentPressedBrush" Color="#0F6674"/>
+
+    <!-- Semantic Colors -->
+    <SolidColorBrush x:Key="SuccessBrush" Color="#28A745"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="#FFC107"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="#DC3545"/>
+    <SolidColorBrush x:Key="InfoBrush" Color="#17A2B8"/>
+
+    <!-- Neutral Colors (Light Theme) -->
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="SurfaceBrush" Color="#F8F9FA"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="#DEE2E6"/>
+
+    <!-- Text Colors -->
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#212529"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#6C757D"/>
+    <SolidColorBrush x:Key="TextDisabledBrush" Color="#ADB5BD"/>
+
+    <!-- Example usage in XAML: -->
+    <!-- <Button Background="{StaticResource PrimaryBrush}" Foreground="White">Click Me</Button> -->
+    <!-- <TextBlock Foreground="{StaticResource TextPrimaryBrush}">Hello World</TextBlock> -->
+
+</ResourceDictionary>

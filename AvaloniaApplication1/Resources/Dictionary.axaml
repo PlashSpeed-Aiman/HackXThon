@@ -1,0 +1,18 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Main resource dictionary for the application -->
+    <!-- Merge all other resource dictionaries here -->
+
+    <ResourceDictionary.MergedDictionaries>
+        <!-- Color palette definitions -->
+        <ResourceInclude Source="/Resources/Brushes/Colors.axaml"/>
+
+        <!-- Add more resource dictionaries as your application grows -->
+        <!-- <ResourceInclude Source="/Resources/Styles/Controls.axaml"/> -->
+        <!-- <ResourceInclude Source="/Resources/Themes/LightTheme.axaml"/> -->
+    </ResourceDictionary.MergedDictionaries>
+
+    <!-- Global resources can be defined here -->
+
+</ResourceDictionary>
