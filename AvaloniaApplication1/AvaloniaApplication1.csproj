@@ -38,8 +38,6 @@
         </PackageReference>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
         <PackageReference Include="Google.GenAI" Version="0.9.0" />
-        <PackageReference Include="LibVLCSharp" Version="3.9.0" />
-        <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.21" Condition="$(RuntimeIdentifier.StartsWith('win'))" />
-        <PackageReference Include="VideoLAN.LibVLC.Mac" Version="3.0.21" Condition="$(RuntimeIdentifier.StartsWith('osx'))" />
+        <PackageReference Include="NetCoreAudio" Version="2.0.0" />
     </ItemGroup>
 </Project>

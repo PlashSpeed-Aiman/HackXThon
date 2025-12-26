@@ -1,0 +1,120 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:AvaloniaApplication1.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="AvaloniaApplication1.Views.BreathingView"
+             x:DataType="vm:BreathingViewModel">
+
+    <Grid Background="#F0F8FF">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="40">
+
+            <!-- Header -->
+            <StackPanel Spacing="10" HorizontalAlignment="Center">
+                <TextBlock Text="Deep Breathing to Deploy"
+                           FontSize="36"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"
+                           Foreground="#2C5F7F" />
+                <TextBlock Text="Complete 3 breathing cycles to unlock the Deploy button"
+                           FontSize="14"
+                           Foreground="#666"
+                           HorizontalAlignment="Center" />
+            </StackPanel>
+
+            <!-- Breathing Circle Animation -->
+            <Canvas Width="400" Height="400" HorizontalAlignment="Center">
+                <!-- Circle with scale transform -->
+                <Ellipse Width="150" Height="150"
+                         Fill="#ADD8E6"
+                         Stroke="#4682B4"
+                         StrokeThickness="3"
+                         Canvas.Left="125"
+                         Canvas.Top="125"
+                         Opacity="0.7"
+                         RenderTransformOrigin="0.5,0.5">
+                    <Ellipse.RenderTransform>
+                        <ScaleTransform ScaleX="{Binding CircleScale}"
+                                        ScaleY="{Binding CircleScale}" />
+                    </Ellipse.RenderTransform>
+                </Ellipse>
+            </Canvas>
+
+            <!-- Instruction Text -->
+            <TextBlock Text="{Binding InstructionText}"
+                       FontSize="24"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Center"
+                       Foreground="#2C5F7F" />
+
+            <!-- Progress Info -->
+            <TextBlock HorizontalAlignment="Center"
+                       FontSize="16"
+                       Foreground="#555">
+                <Run Text="Cycles Completed: " />
+                <Run Text="{Binding CyclesCompleted}" FontWeight="Bold" />
+                <Run Text=" / " />
+                <Run Text="{Binding RequiredCyclesCount}" FontWeight="Bold" />
+            </TextBlock>
+
+            <!-- Control Buttons -->
+            <StackPanel Orientation="Horizontal" Spacing="15" HorizontalAlignment="Center">
+                <Button Content="Start Breathing"
+                        Command="{Binding StartBreathingCommand}"
+                        IsVisible="{Binding !IsBreathing}"
+                        Padding="25,12"
+                        FontSize="16"
+                        Background="#4682B4"
+                        Foreground="White"
+                        CornerRadius="20" />
+
+                <Button Content="Stop"
+                        Command="{Binding StopBreathingCommand}"
+                        IsVisible="{Binding IsBreathing}"
+                        Padding="25,12"
+                        FontSize="16"
+                        Background="#DC143C"
+                        Foreground="White"
+                        CornerRadius="20" />
+            </StackPanel>
+
+            <!-- Deploy Button (Unlocked after 3 cycles) -->
+            <Button Content="Deploy to Production"
+                    Command="{Binding DeployCommand}"
+                    IsEnabled="{Binding IsDeployEnabled}"
+                    Padding="40,15"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Background="#28A745"
+                    Foreground="White"
+                    CornerRadius="25"
+                    HorizontalAlignment="Center">
+                <Button.Styles>
+                    <Style Selector="Button:disabled">
+                        <Setter Property="Background" Value="#CCCCCC" />
+                        <Setter Property="Foreground" Value="#888888" />
+                    </Style>
+                </Button.Styles>
+            </Button>
+
+            <!-- Deploy Confirmation Message -->
+            <Border IsVisible="{Binding ShowDeployConfirmation}"
+                    Background="#E8F5E9"
+                    BorderBrush="#4CAF50"
+                    BorderThickness="2"
+                    CornerRadius="10"
+                    Padding="30,20"
+                    MaxWidth="500"
+                    HorizontalAlignment="Center">
+                <TextBlock Text="{Binding DeployMessage}"
+                           FontSize="18"
+                           FontStyle="Italic"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap"
+                           Foreground="#2E7D32" />
+            </Border>
+
+        </StackPanel>
+    </Grid>
+</UserControl>

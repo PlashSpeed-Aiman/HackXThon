@@ -26,13 +26,18 @@ public static class ServiceLocator
         var geminiService = new GeminiService();
         RegisterSingleton<IGeminiService>(geminiService);
 
-        var audioPlayerService = new LibVlcAudioPlayerService();
+        var audioPlayerService = new NetCoreAudioPlayerService();
         RegisterSingleton<IAudioPlayerService>(audioPlayerService);
+
+        var confessionService = new ConfessionService();
+        RegisterSingleton<IConfessionService>(confessionService);
 
         // Register page ViewModels
         RegisterSingleton(new HomeViewModel());
         RegisterSingleton(new SettingsViewModel());
         RegisterSingleton(new HaikuViewModel(geminiService, audioPlayerService));
+        RegisterSingleton(new ConfessionalViewModel(confessionService));
+        RegisterSingleton(new BreathingViewModel());
 
         // Register main ViewModel (depends on NavigationService)
         RegisterSingleton(new MainWindowViewModel(navigationService));

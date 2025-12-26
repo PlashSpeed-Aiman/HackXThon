@@ -44,6 +44,20 @@
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Left"
                         Padding="10,8" />
+
+                <Button Content="Code Confessional"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="ConfessionalViewModel"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Padding="10,8" />
+
+                <Button Content="Breathing Exercise"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="BreathingViewModel"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Padding="10,8" />
             </StackPanel>
         </Border>
 

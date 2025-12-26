@@ -30,6 +30,12 @@ public partial class MainWindowViewModel : ViewModelBase
             case nameof(HaikuViewModel):
                 NavigationService.NavigateTo<HaikuViewModel>();
                 break;
+            case nameof(ConfessionalViewModel):
+                NavigationService.NavigateTo<ConfessionalViewModel>();
+                break;
+            case nameof(BreathingViewModel):
+                NavigationService.NavigateTo<BreathingViewModel>();
+                break;
         }
     }
 }

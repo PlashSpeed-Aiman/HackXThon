@@ -1,0 +1,157 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:AvaloniaApplication1.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="AvaloniaApplication1.Views.ConfessionalView"
+             x:DataType="vm:ConfessionalViewModel">
+
+    <Grid>
+        <!-- Zen Garden Background Layer with Floating Confessions -->
+        <Canvas Background="#F5F5DC" ClipToBounds="True">
+            <!-- Floating Confessions (ItemsControl bound to ObservableCollection) -->
+            <ItemsControl ItemsSource="{Binding FloatingConfessions}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="#E8E8D0"
+                                BorderBrush="#C0C0A8"
+                                BorderThickness="1"
+                                CornerRadius="8"
+                                Padding="15,10"
+                                MaxWidth="250"
+                                Opacity="{Binding Opacity}">
+                            <Border.RenderTransform>
+                                <TranslateTransform Y="{Binding VerticalOffset}" />
+                            </Border.RenderTransform>
+
+                            <StackPanel Spacing="5">
+                                <TextBlock Text="{Binding Text}"
+                                           FontSize="12"
+                                           TextWrapping="Wrap"
+                                           Foreground="#555" />
+                                <TextBlock Text="{Binding MonkResponse}"
+                                           FontSize="11"
+                                           FontStyle="Italic"
+                                           TextWrapping="Wrap"
+                                           Foreground="#777" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+                <!-- Random positioning via DataTemplate with Canvas positioning -->
+                <ItemsControl.Styles>
+                    <Style Selector="ContentPresenter">
+                        <Setter Property="Canvas.Left" Value="100" />
+                        <Setter Property="Canvas.Top" Value="400" />
+                    </Style>
+                </ItemsControl.Styles>
+            </ItemsControl>
+        </Canvas>
+
+        <!-- Main Confessional UI -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="40" Spacing="20" MaxWidth="600" HorizontalAlignment="Center">
+
+                <!-- Header -->
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Code Confessional Shrine"
+                               FontSize="36"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               Foreground="#8B4513" />
+                    <TextBlock Text="Confess your coding sins. Receive absolution from the Zen Monk."
+                               FontSize="14"
+                               Foreground="#666"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+
+                <Separator Margin="0,10" Background="#C0C0A8" />
+
+                <!-- Confession Input -->
+                <Border Background="White"
+                        BorderBrush="#D0D0C0"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Padding="20">
+                    <StackPanel Spacing="15">
+                        <TextBlock Text="Confess Your Sin:"
+                                   FontWeight="SemiBold"
+                                   FontSize="16"
+                                   Foreground="#8B4513" />
+
+                        <TextBox Text="{Binding ConfessionText, Mode=TwoWay}"
+                                 Watermark="I once committed code directly to production..."
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 MinHeight="120"
+                                 MaxHeight="200"
+                                 Background="#FAFAF5"
+                                 BorderBrush="#D0D0C0" />
+
+                        <Button Content="Confess"
+                                Command="{Binding ConfessCommand}"
+                                HorizontalAlignment="Center"
+                                Padding="30,12"
+                                FontWeight="SemiBold"
+                                FontSize="16"
+                                Background="#8B4513"
+                                Foreground="White"
+                                CornerRadius="20" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Loading Indicator -->
+                <ProgressBar IsIndeterminate="True"
+                             IsVisible="{Binding IsProcessing}"
+                             Margin="0,5" />
+
+                <!-- Monk's Absolution -->
+                <Border IsVisible="{Binding CurrentAbsolution, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                        Background="#FFF8DC"
+                        BorderBrush="#DAA520"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Padding="25"
+                        Margin="0,10,0,0">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="The Monk Speaks:"
+                                   FontWeight="Bold"
+                                   FontSize="18"
+                                   Foreground="#8B4513"
+                                   HorizontalAlignment="Center" />
+
+                        <TextBlock Text="{Binding CurrentAbsolution}"
+                                   FontSize="16"
+                                   FontStyle="Italic"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   LineHeight="28"
+                                   Foreground="#555" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Error Message -->
+                <Border IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                        Background="#FEE"
+                        BorderBrush="#F88"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="15">
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               Foreground="#C00"
+                               TextWrapping="Wrap" />
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
