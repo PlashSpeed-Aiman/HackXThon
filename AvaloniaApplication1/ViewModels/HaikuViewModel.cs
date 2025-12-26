@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using AvaloniaApplication1.Services.Interfaces;
 using AvaloniaApplication1.ViewModels.Base;
@@ -9,6 +10,8 @@ namespace AvaloniaApplication1.ViewModels;
 public partial class HaikuViewModel : ViewModelBase
 {
     private readonly IGeminiService _geminiService;
+    private readonly IAudioPlayerService _audioPlayerService;
+    private bool _audioInitialized;
 
     [ObservableProperty]
     private string _frustrationText = string.Empty;
@@ -22,9 +25,13 @@ public partial class HaikuViewModel : ViewModelBase
     [ObservableProperty]
     private string? _errorMessage;
 
-    public HaikuViewModel(IGeminiService geminiService)
+    [ObservableProperty]
+    private bool _isMusicPlaying;
+
+    public HaikuViewModel(IGeminiService geminiService, IAudioPlayerService audioPlayerService)
     {
         _geminiService = geminiService;
+        _audioPlayerService = audioPlayerService;
     }
 
     private bool CanGenerate => !string.IsNullOrWhiteSpace(FrustrationText) && !IsGenerating;
@@ -60,5 +67,54 @@ public partial class HaikuViewModel : ViewModelBase
     {
         // Notify that CanGenerate might have changed
         GenerateHaikuCommand.NotifyCanExecuteChanged();
+    }
+
+    /// <summary>
+    /// Called when the view is loaded. Initializes and auto-plays music.
+    /// </summary>
+    public async Task OnViewLoadedAsync()
+    {
+        if (!_audioInitialized)
+        {
+            try
+            {
+                await _audioPlayerService.InitializeAsync("avares://AvaloniaApplication1/Assets/Audio/ambient-japanese.mp3");
+                _audioInitialized = true;
+
+                // Auto-play music
+                await _audioPlayerService.PlayAsync();
+                IsMusicPlaying = true;
+            }
+            catch (Exception ex)
+            {
+                // If audio initialization fails, log but don't crash the app
+                ErrorMessage = $"Failed to load background music: {ex.Message}";
+            }
+        }
+    }
+
+    /// <summary>
+    /// Toggles music playback between play and pause.
+    /// </summary>
+    [RelayCommand]
+    private async Task ToggleMusicAsync()
+    {
+        try
+        {
+            if (_audioPlayerService.IsPlaying)
+            {
+                await _audioPlayerService.PauseAsync();
+            }
+            else
+            {
+                await _audioPlayerService.PlayAsync();
+            }
+
+            IsMusicPlaying = _audioPlayerService.IsPlaying;
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Music playback error: {ex.Message}";
+        }
     }
 }

@@ -26,10 +26,13 @@ public static class ServiceLocator
         var geminiService = new GeminiService();
         RegisterSingleton<IGeminiService>(geminiService);
 
+        var audioPlayerService = new LibVlcAudioPlayerService();
+        RegisterSingleton<IAudioPlayerService>(audioPlayerService);
+
         // Register page ViewModels
         RegisterSingleton(new HomeViewModel());
         RegisterSingleton(new SettingsViewModel());
-        RegisterSingleton(new HaikuViewModel(geminiService));
+        RegisterSingleton(new HaikuViewModel(geminiService, audioPlayerService));
 
         // Register main ViewModel (depends on NavigationService)
         RegisterSingleton(new MainWindowViewModel(navigationService));
