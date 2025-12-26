@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using AvaloniaApplication1.Services.Interfaces;
 using AvaloniaApplication1.ViewModels;
 
 namespace AvaloniaApplication1.Services;
@@ -18,11 +19,20 @@ public static class ServiceLocator
     /// </summary>
     public static void Initialize()
     {
-        // Register ViewModels
-        RegisterSingleton(new MainWindowViewModel());
+        // Register core services
+        var navigationService = new NavigationService();
+        RegisterSingleton<INavigationService>(navigationService);
 
-        // Register additional services here as your application grows
-        // Example: RegisterSingleton<IMyService>(new MyService());
+        var geminiService = new GeminiService();
+        RegisterSingleton<IGeminiService>(geminiService);
+
+        // Register page ViewModels
+        RegisterSingleton(new HomeViewModel());
+        RegisterSingleton(new SettingsViewModel());
+        RegisterSingleton(new HaikuViewModel(geminiService));
+
+        // Register main ViewModel (depends on NavigationService)
+        RegisterSingleton(new MainWindowViewModel(navigationService));
     }
 
     /// <summary>

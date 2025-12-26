@@ -1,0 +1,85 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:AvaloniaApplication1.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaApplication1.Views.HaikuView"
+             x:DataType="vm:HaikuViewModel">
+    <ScrollViewer>
+        <StackPanel Margin="20" Spacing="15" MaxWidth="600">
+            <!-- Header -->
+            <TextBlock Text="Haiku Frustration Generator"
+                       FontSize="32"
+                       FontWeight="Bold" />
+
+            <TextBlock Text="Vent your developer frustrations and transform them into beautiful haikus."
+                       FontSize="14"
+                       Foreground="Gray"
+                       TextWrapping="Wrap" />
+
+            <Separator Margin="0,10" />
+
+            <!-- Input Section -->
+            <TextBlock Text="Your Frustration:"
+                       FontWeight="SemiBold"
+                       Margin="0,5,0,0" />
+
+            <TextBox Text="{Binding FrustrationText, Mode=TwoWay}"
+                     Watermark="Type your coding frustration here..."
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     MinHeight="100"
+                     MaxHeight="200" />
+
+            <!-- Generate Button -->
+            <Button Content="Generate Haiku"
+                    Command="{Binding GenerateHaikuCommand}"
+                    HorizontalAlignment="Left"
+                    Padding="20,10"
+                    FontWeight="SemiBold" />
+
+            <!-- Loading Indicator -->
+            <ProgressBar IsIndeterminate="True"
+                         IsVisible="{Binding IsGenerating}"
+                         Margin="0,5" />
+
+            <!-- Generated Haiku Section -->
+            <Border IsVisible="{Binding GeneratedHaiku, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                    Background="#F9F9F9"
+                    BorderBrush="#E0E0E0"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="20"
+                    Margin="0,10,0,0">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Your Haiku:"
+                               FontWeight="SemiBold"
+                               Foreground="#666" />
+
+                    <TextBlock Text="{Binding GeneratedHaiku}"
+                               FontSize="18"
+                               FontStyle="Italic"
+                               FontFamily="Georgia, serif"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               LineHeight="30"
+                               Foreground="#333" />
+                </StackPanel>
+            </Border>
+
+            <!-- Error Message -->
+            <Border IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                    Background="#FEE"
+                    BorderBrush="#F88"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Padding="15"
+                    Margin="0,5,0,0">
+                <TextBlock Text="{Binding ErrorMessage}"
+                           Foreground="#C00"
+                           TextWrapping="Wrap" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

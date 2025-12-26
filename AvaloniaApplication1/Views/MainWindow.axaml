@@ -15,6 +15,41 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <Grid ColumnDefinitions="200,*">
+        <!-- Sidebar -->
+        <Border Grid.Column="0" Background="#F5F5F5" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+            <StackPanel Spacing="5" Margin="10">
+                <TextBlock Text="Navigation"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Margin="0,10,0,20" />
+
+                <Button Content="Home"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="HomeViewModel"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Padding="10,8" />
+
+                <Button Content="Settings"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="SettingsViewModel"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Padding="10,8" />
+
+                <Button Content="Haiku"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="HaikuViewModel"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Padding="10,8" />
+            </StackPanel>
+        </Border>
+
+        <!-- Content Area -->
+        <ContentControl Grid.Column="1"
+                        Content="{Binding NavigationService.CurrentViewModel}" />
+    </Grid>
 
 </Window>
