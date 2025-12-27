@@ -16,7 +16,6 @@ public class NetCoreAudioPlayerService : IAudioPlayerService, IDisposable
 {
     private readonly Player _player;
     private string? _cachedFilePath;
-    private bool _isPaused;
     private bool _disposed;
 
     public bool IsPlaying => !_disposed && _player.Playing;
@@ -63,18 +62,8 @@ public class NetCoreAudioPlayerService : IAudioPlayerService, IDisposable
 
         try
         {
-            if (_isPaused)
-            {
-                // Resume from pause
-                _player.Resume();
-                _isPaused = false;
-            }
-            else
-            {
-                // Start new playback
-                await _player.Play(_cachedFilePath);
-            }
-
+            // Always start fresh playback (NetCoreAudio Resume() is unreliable)
+            await _player.Play(_cachedFilePath);
             RaisePlaybackStateChanged(true);
         }
         catch (Exception ex)
@@ -84,7 +73,7 @@ public class NetCoreAudioPlayerService : IAudioPlayerService, IDisposable
     }
 
     /// <summary>
-    /// Pauses audio playback.
+    /// Stops audio playback.
     /// </summary>
     public Task PauseAsync()
     {
@@ -96,13 +85,13 @@ public class NetCoreAudioPlayerService : IAudioPlayerService, IDisposable
 
         try
         {
-            _player.Pause();
-            _isPaused = true;
+            // Use Stop() instead of Pause() for reliability
+            _player.Stop();
             RaisePlaybackStateChanged(false);
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException($"Failed to pause audio: {ex.Message}", ex);
+            throw new InvalidOperationException($"Failed to stop audio: {ex.Message}", ex);
         }
 
         return Task.CompletedTask;
@@ -143,7 +132,6 @@ public class NetCoreAudioPlayerService : IAudioPlayerService, IDisposable
         // Restart playback for seamless looping
         try
         {
-            _isPaused = false;
             await _player.Play(_cachedFilePath);
             RaisePlaybackStateChanged(true);
         }

@@ -39,12 +39,20 @@ public static class ServiceLocator
         var hotkeyService = new GlobalHotkeyService();
         RegisterSingleton<IGlobalHotkeyService>(hotkeyService);
 
+        // Register game services
+        var gameConfigService = new GameConfigurationService();
+        RegisterSingleton<IGameConfigurationService>(gameConfigService);
+
+        var gameService = new GodotGameService();
+        RegisterSingleton<IGodotGameService>(gameService);
+
         // Register page ViewModels
         RegisterSingleton(new HomeViewModel());
         RegisterSingleton(new SettingsViewModel());
         RegisterSingleton(new HaikuViewModel(geminiService, audioPlayerService));
         RegisterSingleton(new ConfessionalViewModel(confessionService));
         RegisterSingleton(new BreathingViewModel());
+        RegisterSingleton(new GameViewModel(gameService, gameConfigService));
 
         // Register main ViewModel (depends on NavigationService)
         RegisterSingleton(new MainWindowViewModel(navigationService));

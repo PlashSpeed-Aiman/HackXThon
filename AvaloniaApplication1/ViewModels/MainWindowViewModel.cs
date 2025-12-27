@@ -36,6 +36,9 @@ public partial class MainWindowViewModel : ViewModelBase
             case nameof(BreathingViewModel):
                 NavigationService.NavigateTo<BreathingViewModel>();
                 break;
+            case nameof(GameViewModel):
+                NavigationService.NavigateTo<GameViewModel>();
+                break;
         }
     }
 }

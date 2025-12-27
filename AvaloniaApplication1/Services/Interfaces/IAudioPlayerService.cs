@@ -26,7 +26,7 @@ public interface IAudioPlayerService
     Task PlayAsync();
 
     /// <summary>
-    /// Pauses audio playback.
+    /// Stops audio playback. Music will restart from the beginning when PlayAsync() is called.
     /// </summary>
     Task PauseAsync();
 

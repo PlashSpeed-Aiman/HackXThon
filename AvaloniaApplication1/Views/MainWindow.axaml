@@ -58,6 +58,13 @@
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Left"
                         Padding="10,8" />
+
+                <Button Content="Godot Game"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="GameViewModel"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Padding="10,8" />
             </StackPanel>
         </Border>
 

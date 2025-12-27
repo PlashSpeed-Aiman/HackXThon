@@ -32,6 +32,9 @@ public partial class HaikuViewModel : ViewModelBase
     {
         _geminiService = geminiService;
         _audioPlayerService = audioPlayerService;
+
+        // Subscribe to playback state changes
+        _audioPlayerService.PlaybackStateChanged += OnPlaybackStateChanged;
     }
 
     private bool CanGenerate => !string.IsNullOrWhiteSpace(FrustrationText) && !IsGenerating;
@@ -70,6 +73,14 @@ public partial class HaikuViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Handles playback state changes from the audio service.
+    /// </summary>
+    private void OnPlaybackStateChanged(object? sender, bool isPlaying)
+    {
+        IsMusicPlaying = isPlaying;
+    }
+
+    /// <summary>
     /// Called when the view is loaded. Initializes and auto-plays music.
     /// </summary>
     public async Task OnViewLoadedAsync()
@@ -83,7 +94,7 @@ public partial class HaikuViewModel : ViewModelBase
 
                 // Auto-play music
                 await _audioPlayerService.PlayAsync();
-                IsMusicPlaying = true;
+                // State will be updated via PlaybackStateChanged event
             }
             catch (Exception ex)
             {
@@ -110,7 +121,7 @@ public partial class HaikuViewModel : ViewModelBase
                 await _audioPlayerService.PlayAsync();
             }
 
-            IsMusicPlaying = _audioPlayerService.IsPlaying;
+            // State will be updated via PlaybackStateChanged event
         }
         catch (Exception ex)
         {

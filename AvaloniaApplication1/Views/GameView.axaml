@@ -1,0 +1,106 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:AvaloniaApplication1.ViewModels"
+             xmlns:controls="using:AvaloniaApplication1.Controls.Custom"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="AvaloniaApplication1.Views.GameView"
+             x:DataType="vm:GameViewModel">
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Control Panel -->
+        <Border Grid.Row="0" Background="#F5F5F5" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="15">
+            <StackPanel Spacing="10">
+                <!-- Title -->
+                <TextBlock Text="Godot Game Integration"
+                           FontSize="20"
+                           FontWeight="Bold" />
+
+                <!-- Game Path Selection -->
+                <Grid ColumnDefinitions="*,Auto,Auto,Auto">
+                    <TextBox Grid.Column="0"
+                             Text="{Binding GameExecutablePath, Mode=TwoWay}"
+                             Watermark="Path to Godot game executable..."
+                             Margin="0,0,10,0" />
+
+                    <Button Grid.Column="1"
+                            Content="Browse..."
+                            Click="BrowseButton_Click"
+                            Margin="0,0,10,0"
+                            Padding="15,8" />
+
+                    <Button Grid.Column="2"
+                            Content="Start Game"
+                            Command="{Binding StartGameCommand}"
+                            Background="#4CAF50"
+                            Foreground="White"
+                            Margin="0,0,10,0"
+                            Padding="15,8" />
+
+                    <Button Grid.Column="3"
+                            Content="Stop Game"
+                            Command="{Binding StopGameCommand}"
+                            Background="#F44336"
+                            Foreground="White"
+                            Padding="15,8" />
+                </Grid>
+
+                <!-- Status Message -->
+                <TextBlock Text="{Binding StatusMessage}"
+                           FontStyle="Italic"
+                           Foreground="#666666" />
+
+                <!-- Error Message -->
+                <Border IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                        Background="#FFEBEE"
+                        BorderBrush="#F44336"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        Padding="10">
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               Foreground="#C62828"
+                               TextWrapping="Wrap" />
+                </Border>
+
+                <!-- Loading Indicator -->
+                <StackPanel IsVisible="{Binding IsGameLoading}"
+                            Orientation="Horizontal"
+                            Spacing="10">
+                    <ProgressBar IsIndeterminate="True"
+                                 Width="200"
+                                 Height="4" />
+                    <TextBlock Text="Loading..."
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- Game Host Area -->
+        <Border Grid.Row="1" Background="#000000">
+            <Grid>
+                <!-- Game Host Control -->
+                <controls:GodotGameHost GameService="{Binding GameService}"
+                                       IsVisible="{Binding IsGameRunning}" />
+
+                <!-- Placeholder when no game is running -->
+                <StackPanel IsVisible="{Binding !IsGameRunning}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Spacing="15">
+                    <TextBlock Text="No game running"
+                               FontSize="24"
+                               Foreground="White"
+                               HorizontalAlignment="Center" />
+                    <TextBlock Text="Select a Godot game executable and click 'Start Game' to begin"
+                               FontSize="14"
+                               Foreground="#CCCCCC"
+                               HorizontalAlignment="Center"
+                               TextWrapping="Wrap"
+                               MaxWidth="400"
+                               TextAlignment="Center" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
