@@ -61,6 +61,11 @@ public class GodotGameService : IGodotGameService
                 return false;
             }
 
+            Debug.WriteLine($"[GodotGameService] Game process started successfully");
+            Debug.WriteLine($"[GodotGameService]   Process ID: {_gameProcess.Id}");
+            Debug.WriteLine($"[GodotGameService]   Process Name: {_gameProcess.ProcessName}");
+            Debug.WriteLine($"[GodotGameService]   Executable: {executablePath}");
+
             // Subscribe to process exit event
             _gameProcess.EnableRaisingEvents = true;
             _gameProcess.Exited += OnGameProcessExited;
@@ -130,38 +135,59 @@ public class GodotGameService : IGodotGameService
         const int maxRetries = 20; // 20 attempts
         const int delayMs = 250;   // 250ms between attempts = 5 seconds total
 
+        Debug.WriteLine($"[GodotGameService] Starting window discovery for process {processId}");
+        Debug.WriteLine($"[GodotGameService]   Max retries: {maxRetries}, Delay: {delayMs}ms, Total timeout: {maxRetries * delayMs / 1000}s");
+
         for (int i = 0; i < maxRetries; i++)
         {
+            Debug.WriteLine($"[GodotGameService] Discovery attempt {i + 1}/{maxRetries}");
             IntPtr foundHandle = FindMainWindowForProcess(processId);
 
             if (foundHandle != IntPtr.Zero)
             {
+                Debug.WriteLine($"[GodotGameService] ✓ Window found! Handle: 0x{foundHandle.ToString("X")}");
                 return foundHandle;
             }
 
+            Debug.WriteLine($"[GodotGameService]   No window found yet, waiting {delayMs}ms...");
             await Task.Delay(delayMs);
         }
 
+        Debug.WriteLine($"[GodotGameService] ✗ Window discovery FAILED after {maxRetries} attempts");
         return IntPtr.Zero;
     }
 
     private IntPtr FindMainWindowForProcess(int processId)
     {
         IntPtr foundWindow = IntPtr.Zero;
+        int windowsChecked = 0;
+        int windowsMatchingProcessId = 0;
 
         EnumWindows((hWnd, lParam) =>
         {
+            windowsChecked++;
             GetWindowThreadProcessId(hWnd, out uint windowProcessId);
 
-            if (windowProcessId == processId && IsWindowVisible(hWnd))
+            bool isVisible = IsWindowVisible(hWnd);
+            bool matchesProcess = windowProcessId == processId;
+
+            if (matchesProcess)
+            {
+                windowsMatchingProcessId++;
+                Debug.WriteLine($"[GodotGameService]     Found window for our process: hWnd=0x{hWnd.ToString("X")}, Visible={isVisible}");
+            }
+
+            if (matchesProcess && isVisible)
             {
                 foundWindow = hWnd;
+                Debug.WriteLine($"[GodotGameService]     ✓ This window is visible! Using it.");
                 return false; // Stop enumeration
             }
 
             return true; // Continue enumeration
         }, IntPtr.Zero);
 
+        Debug.WriteLine($"[GodotGameService]   Windows checked: {windowsChecked}, Matching process ID: {windowsMatchingProcessId}, Found visible: {foundWindow != IntPtr.Zero}");
         return foundWindow;
     }
 
