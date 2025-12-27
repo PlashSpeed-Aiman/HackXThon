@@ -5,6 +5,24 @@
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
+    <TrayIcon.Icons>
+        <TrayIcons>
+            <TrayIcon Icon="/Assets/avalonia-logo.ico"
+                      ToolTipText="Avalonia Developer Wellness">
+                <TrayIcon.Menu>
+                    <NativeMenu>
+                        <NativeMenuItem Header="Show Window" Click="ShowWindow_Click" />
+                        <NativeMenuItem Header="Hide Window" Click="HideWindow_Click" />
+                        <NativeMenuItemSeparator />
+                        <NativeMenuItem Header="Settings" Click="Settings_Click" />
+                        <NativeMenuItemSeparator />
+                        <NativeMenuItem Header="Exit" Click="Exit_Click" />
+                    </NativeMenu>
+                </TrayIcon.Menu>
+            </TrayIcon>
+        </TrayIcons>
+    </TrayIcon.Icons>
+
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>

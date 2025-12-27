@@ -32,6 +32,13 @@ public static class ServiceLocator
         var confessionService = new ConfessionService();
         RegisterSingleton<IConfessionService>(confessionService);
 
+        // Register window management services
+        var windowManagerService = new WindowManagerService();
+        RegisterSingleton<IWindowManagerService>(windowManagerService);
+
+        var hotkeyService = new GlobalHotkeyService();
+        RegisterSingleton<IGlobalHotkeyService>(hotkeyService);
+
         // Register page ViewModels
         RegisterSingleton(new HomeViewModel());
         RegisterSingleton(new SettingsViewModel());
