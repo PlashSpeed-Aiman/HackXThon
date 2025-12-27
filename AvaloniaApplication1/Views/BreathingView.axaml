@@ -3,9 +3,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:AvaloniaApplication1.ViewModels"
+             xmlns:converters="using:AvaloniaApplication1.Converters.Common"
+             xmlns:models="using:AvaloniaApplication1.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
              x:Class="AvaloniaApplication1.Views.BreathingView"
              x:DataType="vm:BreathingViewModel">
+
+    <UserControl.Resources>
+        <converters:AngleToArcConverter x:Key="AngleToArcConverter" />
+    </UserControl.Resources>
 
     <Grid Background="#F0F8FF">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="40">
@@ -23,23 +29,76 @@
                            HorizontalAlignment="Center" />
             </StackPanel>
 
-            <!-- Breathing Circle Animation -->
-            <Canvas Width="400" Height="400" HorizontalAlignment="Center">
-                <!-- Circle with scale transform -->
-                <Ellipse Width="150" Height="150"
-                         Fill="#ADD8E6"
-                         Stroke="#4682B4"
-                         StrokeThickness="3"
-                         Canvas.Left="125"
-                         Canvas.Top="125"
-                         Opacity="0.7"
-                         RenderTransformOrigin="0.5,0.5">
-                    <Ellipse.RenderTransform>
+            <!-- Breathing Circle Animation with Visual Effects -->
+            <Grid Width="400" Height="400" HorizontalAlignment="Center" ClipToBounds="True">
+
+                <!-- Layer 1: Background progress ring (gray) -->
+                <Ellipse Width="180" Height="180"
+                         HorizontalAlignment="Center" VerticalAlignment="Center"
+                         Stroke="#E0E0E0"
+                         StrokeThickness="6"
+                         Fill="Transparent" />
+
+                <!-- Layer 2: Particle effects -->
+                <ItemsControl ItemsSource="{Binding Particles}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="models:BreathingParticle">
+                            <Ellipse Width="{Binding Size}"
+                                     Height="{Binding Size}"
+                                     Fill="{Binding Color}"
+                                     Opacity="{Binding Opacity}"
+                                     Canvas.Left="{Binding X}"
+                                     Canvas.Top="{Binding Y}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Layer 3: Animated progress arc -->
+                <Canvas>
+                    <Path Stroke="{Binding ProgressRingColor}"
+                          StrokeThickness="6"
+                          StrokeLineCap="Round"
+                          Fill="Transparent"
+                          Data="{Binding ProgressAngle, Converter={StaticResource AngleToArcConverter}}" />
+                </Canvas>
+
+                <!-- Layer 4: Breathing circle with glow (consolidated) -->
+                <Border Width="150" Height="150"
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        CornerRadius="75"
+                        Background="Transparent"
+                        BoxShadow="{Binding BoxShadowString}"
+                        RenderTransformOrigin="0.5,0.5">
+                    <Border.OpacityMask>
+                        <RadialGradientBrush>
+                            <GradientStop Color="White" Offset="0" />
+                            <GradientStop Color="White" Offset="1" />
+                        </RadialGradientBrush>
+                    </Border.OpacityMask>
+                    <Border.RenderTransform>
                         <ScaleTransform ScaleX="{Binding CircleScale}"
                                         ScaleY="{Binding CircleScale}" />
-                    </Ellipse.RenderTransform>
-                </Ellipse>
-            </Canvas>
+                    </Border.RenderTransform>
+
+                    <Grid>
+                        <!-- Glow effect layer -->
+                        <Ellipse Fill="Transparent"
+                                 Opacity="{Binding GlowIntensity}" />
+
+                        <!-- Main circle -->
+                        <Ellipse Fill="{Binding CircleFillColor}"
+                                 Stroke="{Binding CircleStrokeColor}"
+                                 StrokeThickness="3"
+                                 Opacity="0.7" />
+                    </Grid>
+                </Border>
+            </Grid>
 
             <!-- Instruction Text -->
             <TextBlock Text="{Binding InstructionText}"
