@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Avalonia.Threading;
+using Avalonia;
 using AvaloniaApplication1.Models;
 using AvaloniaApplication1.ViewModels.Base;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -39,6 +40,16 @@ public partial class BreathingViewModel : ViewModelBase, IDisposable
 
     [ObservableProperty]
     private double _circleScale = 1.0;
+
+    partial void OnCircleScaleChanged(double value)
+    {
+        OnPropertyChanged(nameof(CircleSize));
+        OnPropertyChanged(nameof(CircleCornerRadius));
+    }
+
+    public double CircleSize => 150.0 * CircleScale;
+
+    public CornerRadius CircleCornerRadius => new CornerRadius(CircleSize / 2.0);
 
     [ObservableProperty]
     private string _instructionText = "Press Start to Begin";

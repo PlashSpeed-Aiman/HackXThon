@@ -69,23 +69,18 @@
                 </Canvas>
 
                 <!-- Layer 4: Breathing circle with glow (consolidated) -->
-                <Border Width="150" Height="150"
+                <Border Width="{Binding CircleSize}" Height="{Binding CircleSize}"
                         HorizontalAlignment="Center" VerticalAlignment="Center"
-                        CornerRadius="75"
+                        CornerRadius="{Binding CircleCornerRadius}"
                         Background="Transparent"
-                        BoxShadow="{Binding BoxShadowString}"
-                        RenderTransformOrigin="0.5,0.5">
+                        BoxShadow="{Binding BoxShadowString}">
                     <Border.OpacityMask>
                         <RadialGradientBrush>
                             <GradientStop Color="White" Offset="0" />
                             <GradientStop Color="White" Offset="1" />
                         </RadialGradientBrush>
                     </Border.OpacityMask>
-                    <Border.RenderTransform>
-                        <ScaleTransform ScaleX="{Binding CircleScale}"
-                                        ScaleY="{Binding CircleScale}" />
-                    </Border.RenderTransform>
-
+                    
                     <Grid>
                         <!-- Glow effect layer -->
                         <Ellipse Fill="Transparent"
